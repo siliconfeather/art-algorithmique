@@ -7,22 +7,23 @@ initial code inspired by: https://www.geeksforgeeks.org/p5-js-displaywidth-varia
 */
 
 function setup() { 
-  
     // use of displayWidth variable 
     createCanvas(displayWidth-100, displayHeight-150); 
   
     // Set text size
     textSize(40); 
-    
-    //si je mets noLoop le cercle ne suit pas la souris
-    //noLoop();
-    
+
+    const x = random(0, displayWidth-400)
+    const y = random(0, displayHeight-200)
+
+    text("Where is art?", x, y); 
 } 
   
-function draw() { 
-    background(000); 
-    circle(mouseX, mouseY, 180, 180); 
+function draw(x,y) { 
+     
+    //background(000);
+    circle(mouseX, mouseY, 480, 480); 
 
-    //en l'état, where is art change d'emplacement à chaque loop, il faut garder le loop pour suivre la souris mais définir des constantes pour l'emplacement de "Where is art?"
-    text("Where is art?", random(0, displayWidth-250), random(0, displayHeight-100)); 
+    //en l'état je crois que j'efface le texte avec draw (on le voit mieux sans background), il faut que je réussisse à le mettre dans draw mais en récupérant les valeurs constantes x et y dans setup
+    
 } 
