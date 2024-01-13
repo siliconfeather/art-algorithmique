@@ -16,7 +16,8 @@ function setup() {
     // le canevas fait la taille de la fenêtre du navigateur (ne recharge pas en cas de modification de la taille de la fenêtre)
     createCanvas(windowWidth, windowHeight); 
   
-    textSize(30); 
+    textSize(35); 
+    textFont('BagnardRegular') //thanks open foundry https://open-foundry.com/fonts
 
     //peut-être ajuster les valeurs intiales (100 au lieu de zéro) car le curseur a des chances d'être en haut de la page / pour ne pas tomber dessus trop vite?
     x = random(0, windowWidth-400)
@@ -29,10 +30,10 @@ function draw() {
      
     background(0o0); //à aller voir: fonctionnement des codes couleurs, 000 donnait une erreur
 
+
     circle(mouseX, mouseY, 280, 280); 
     //quel support pour tablette/touch? 
 
-    //comment changer la fonte?
     text("Where is art?", x, y); 
 
 
