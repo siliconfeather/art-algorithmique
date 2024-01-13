@@ -10,22 +10,23 @@ var x
 var y
 
 function setup() { 
-    // use of displayWidth variable 
-    createCanvas(displayWidth-100, displayHeight-150); 
+    // displayWidth prend la taille de mon écran et non de la fenêtre. Utiliser WidowWidth
+    createCanvas(windowWidth, windowHeight); 
   
     // Set text size
-    textSize(40); 
+    textSize(30); 
 
-    x = random(0, displayWidth-400)
-    y = random(0, displayHeight-200)
+    x = random(0, windowWidth-400)
+    y = random(0, windowHeight-100)
 } 
   
 function draw() { 
      
-    background(000);
-    circle(mouseX, mouseY, 480, 480); 
+    background(0o0);
+    circle(mouseX, mouseY, 280, 280); 
+    //quel support pour tablette/touch? 
 
-    //ça marche!
+    //comment changer la fonte?
     text("Where is art?", x, y); 
 
     
