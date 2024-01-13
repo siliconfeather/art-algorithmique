@@ -2,7 +2,7 @@
     title: Where is art? 
     author: LenaMK
     date: 2023-01-13
-    description: rechercher le texte "Where is art?", la souris est un cercle blanc qui révèle le texte en noir sur fond noir. L'emplacement du texte est différent (random) à chaque fois qu'on charge la page
+    description: rechercher le texte "Art is here", la souris est un cercle blanc qui révèle le texte en noir sur fond noir. L'emplacement du texte est différent (random) à chaque fois qu'on charge la page
     inpiration: effet lampe de poche; tel un spéléologue dans une grotte. Discussions dans le cours sur qu'est-ce que c'est l'art, et "où" il se trouve
     initial code inspired by: https://www.geeksforgeeks.org/p5-js-displaywidth-variable/
 
@@ -34,7 +34,7 @@ function draw() {
     circle(mouseX, mouseY, 280, 280); 
     //quel support pour tablette/touch? 
 
-    text("Where is art?", x, y); 
+    text("Art is here.", x, y); 
 
 
 } 
