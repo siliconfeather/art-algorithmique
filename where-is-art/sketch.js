@@ -20,8 +20,10 @@ function setup() {
     textFont('BagnardRegular') //thanks open foundry https://open-foundry.com/fonts
 
     //peut-être ajuster les valeurs intiales (100 au lieu de zéro) car le curseur a des chances d'être en haut de la page / pour ne pas tomber dessus trop vite?
-    x = random(0, windowWidth-400)
+    x = random(0, windowWidth-400) //get length/height from p5 (typo, taille, ...)
     y = random(0, windowHeight-100)
+
+    //fonction setPosition (on clic, appeler la fonction changer la position)
 
     noCursor(); //enlève la souris
 } 
@@ -32,7 +34,7 @@ function draw() {
 
 
     circle(mouseX, mouseY, 280, 280); 
-    //quel support pour tablette/touch? 
+    //quel support pour tablette/touch? ok mais erreur dans taille de navigateur
 
     text("Art is here.", x, y); 
 
