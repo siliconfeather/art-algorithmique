@@ -2,7 +2,7 @@
     title: Where is art? 
     author: LenaMK
     date: 2023-01-13
-    description: rechercher le texte "Art is here", la souris est un cercle blanc qui révèle le texte en noir sur fond noir. L'emplacement du texte est différent (random) à chaque fois qu'on charge la page
+    description: rechercher le texte "Art is here". La souris est un cercle blanc qui révèle le texte en noir sur fond noir. L'emplacement du texte est différent (random) à chaque fois qu'on charge la page, et se modifie quand on clique sur le texte
     inpiration: effet lampe de poche; tel un spéléologue dans une grotte. Discussions dans le cours sur qu'est-ce que c'est l'art, et "où" il se trouve
     initial code inspired by: https://www.geeksforgeeks.org/p5-js-displaywidth-variable/
 
@@ -15,8 +15,12 @@ var fontsize = 35
 var font = 'BagnardRegular'
 var artWidth, artHeight, artAscent, artDescent
 
+// Circle
+var circleRadius //somehow isn't the radius but the diameter...
+var overflow = 50
+
 function setup() { 
-    // le canevas fait la taille de la fenêtre du navigateur (ne recharge pas en cas de modification de la taille de la fenêtre)
+    
     createCanvas(windowWidth, windowHeight); 
   
     textSize(fontsize); 
@@ -25,20 +29,27 @@ function setup() {
     artWidth = textWidth(art)
     artAscent = textAscent()
     artDescent = textDescent()
+    artHeight = artAscent+artDescent
+
+    circleRadius = (artWidth+overflow)
 
     console.log("size: "+artWidth+" "+artAscent+" "+artDescent)
 
-    artHeight = artAscent+artDescent
 
     setArt();
 
+    //the cursor could actually be the text cursor(type)
     noCursor(); //enlève la souris, voir si c'est à garder vu qu'on ajoute une interaction avec un clic
 } 
 
 function setArt(){
-    // ajuster les valeurs intiales 
-    x = random(0, windowWidth-artWidth) 
-    y = random(0, windowHeight-artHeight)
+    // enlever l'ancier s'il y en a un et placer le nouveau
+    clear()
+    x = random(5, windowWidth-artWidth) 
+    y = random(artAscent, windowHeight-artDescent) //pour que ça fitte exactement
+
+    console.log("x", x)
+    console.log("y", y)
 }
 
 
@@ -46,22 +57,37 @@ function setArt(){
 // The coding Train https://www.youtube.com/watch?v=DEHsr4XicN8
 // dist(x,y, mouseX, mouseY)
 function mousePressed() {
-    //reste à set art seulement quand le cercle est sur Art
-    var d = dist(mouseX, mouseY, x, y)
-    setArt();
+    //quand le cercle est sur Art: qz
+
+    console.log(mouseX, mouseY)
+    var artCenterX = x + artWidth/2
+    var artCenterY = y + artHeight/2
+
+    var distance = dist(mouseX, mouseY, artCenterX, artCenterY)
+    console.log("distance from mouse", distance)
+    //make sure the new art location is far enough from current pos? 
+
+    if (distance < overflow)
+        setArt();
+    
 }
 
 function draw() { 
      
-    background(0o0); //à aller voir: fonctionnement des codes couleurs, 000 donnait une erreur
+    background(0o0); 
 
 
-    circle(mouseX, mouseY, 280, 280); 
+    circle(mouseX, mouseY, circleRadius); 
     //quel support pour tablette/touch? ok mais erreur dans taille de navigateur
 
+    //rectangle is exactly the size of the text 
+    //rect(x, y-artAscent, artWidth, artHeight) 
+
+    //text gets a bit thick from reloading over itself but it doesn't when the mouse is over it so no difference
     text(art, x, y); 
 
-    text.clicked = function() {}
+    rect()
+
 
 
 } 
