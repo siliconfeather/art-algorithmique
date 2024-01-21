@@ -8,26 +8,49 @@
 
 */
 
-// devraient plutôt être des constantes mais il ne reconaît pas la fonction random à l'extérieur de setup
-var x
-var y
+// Art position
+var x, y
+var art = "Art is here."
+var fontsize = 35
+var font = 'BagnardRegular'
+var artWidth, artHeight, artAscent, artDescent
 
 function setup() { 
     // le canevas fait la taille de la fenêtre du navigateur (ne recharge pas en cas de modification de la taille de la fenêtre)
     createCanvas(windowWidth, windowHeight); 
   
-    textSize(35); 
-    textFont('BagnardRegular') //thanks open foundry https://open-foundry.com/fonts
+    textSize(fontsize); 
+    textFont(font) 
 
-    //peut-être ajuster les valeurs intiales (100 au lieu de zéro) car le curseur a des chances d'être en haut de la page / pour ne pas tomber dessus trop vite?
-    x = random(0, windowWidth-400) //get length/height from p5 (typo, taille, ...)
-    y = random(0, windowHeight-100)
+    artWidth = textWidth(art)
+    artAscent = textAscent()
+    artDescent = textDescent()
 
-    //fonction setPosition (on clic, appeler la fonction changer la position)
+    console.log("size: "+artWidth+" "+artAscent+" "+artDescent)
 
-    noCursor(); //enlève la souris
+    artHeight = artAscent+artDescent
+
+    setArt();
+
+    noCursor(); //enlève la souris, voir si c'est à garder vu qu'on ajoute une interaction avec un clic
 } 
-  
+
+function setArt(){
+    // ajuster les valeurs intiales 
+    x = random(0, windowWidth-artWidth) 
+    y = random(0, windowHeight-artHeight)
+}
+
+
+//function mousePressed() by p5
+// The coding Train https://www.youtube.com/watch?v=DEHsr4XicN8
+// dist(x,y, mouseX, mouseY)
+function mousePressed() {
+    //reste à set art seulement quand le cercle est sur Art
+    var d = dist(mouseX, mouseY, x, y)
+    setArt();
+}
+
 function draw() { 
      
     background(0o0); //à aller voir: fonctionnement des codes couleurs, 000 donnait une erreur
@@ -36,15 +59,17 @@ function draw() {
     circle(mouseX, mouseY, 280, 280); 
     //quel support pour tablette/touch? ok mais erreur dans taille de navigateur
 
-    text("Art is here.", x, y); 
+    text(art, x, y); 
+
+    text.clicked = function() {}
 
 
 } 
 
-/*
-Pour changer la taille du canevas si la taille de la fenêtre est modifiée
+
+// Pour changer la taille du canevas si la taille de la fenêtre est modifiée.
+// source: https://stackoverflow.com/questions/68029286/how-do-i-make-the-canvas-perfectly-fit-to-the-window-size-in-p5
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  setArt()
 }
-source: https://stackoverflow.com/questions/68029286/how-do-i-make-the-canvas-perfectly-fit-to-the-window-size-in-p5
-*/
