@@ -34,9 +34,6 @@ function setup() {
 
     circleRadius = (artWidth+overflow)
 
-    console.log("size: "+artWidth+" "+artAscent+" "+artDescent)
-
-
     setArt();
 
     noCursor(); 
