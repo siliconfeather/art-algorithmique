@@ -29,9 +29,11 @@ function draw() {
 
     fill(255);
 
+    //quad(x1, y1, x2, y2, x3, y3, x4, y4)
+
     for (let y = margin; y < (windowHeight-margin); y += diag){
-        for ( let x = margin; x < (windowWidth-margin); x += diag){ //for as often as 
-            rect(x, y, side, side)
+        for ( let x = margin; x < (windowWidth-margin); x += diag){ 
+            quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y-diag/2)
         }
     }
 
