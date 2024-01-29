@@ -33,7 +33,7 @@ function draw() {
 
     for (let y = margin; y < (windowHeight-margin); y += diag){
         for ( let x = margin; x < (windowWidth-margin); x += diag){ 
-            quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y-diag/2)
+            quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
         }
     }
 
