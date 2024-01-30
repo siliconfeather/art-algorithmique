@@ -30,31 +30,33 @@ function draw() {
 
     //quad(x1, y1, x2, y2, x3, y3, x4, y4)
     
-    let line = false; 
-    //let column = false;
-    let alternate = true;
+    let line = true; 
+    let alternate = false;
 
     for (let y = margin; y < (windowHeight-diag); y += diag){
-        //line
+        //line or  y height
         for ( let x = margin; x < (windowWidth-diag); x += diag){ 
-            //column
-            if(line){
-                quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
-                line = false;
+            // column or x position
+            
+            if (alternate){
+                if(line){
+                    quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
+                    line = false;
+                }
+                else {
+                    line = true
+                }
             }
             else {
-                line = true
-            }   
-        }
+                quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
+            }
 
-        if (alternate){
-            line = !line
-            alternate = false
+            
+             
         }
-        else{
-            alternate = true
-        }
-         //reset at each line
+        alternate = !alternate
+        
+        line = true
     }
 
     
