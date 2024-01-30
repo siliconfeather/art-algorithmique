@@ -8,3 +8,4 @@ Travaux pour le [cours IFT6251 art algorithmique avec Benoît Beaudry](https://g
 
 
 - [Where is art?](./where-is-art/)
+- [Vermeer's tiles](./vermeer/)
