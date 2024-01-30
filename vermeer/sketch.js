@@ -1,10 +1,9 @@
 /*
-    title: Vermeer
+    title: Vermeer's tiles
     author: LenaMK
     date: 2023-01-29
-    description: 
-    inpiration: les planchers pas tout à fait en damier de Vermeer
-
+    description: les planchers dans les œuvres de Vermer
+    inpiration: genuary 25th prompt "If you like generative art, you probably have some photos on your phone of cool looking patterns, textures, shapes or things that you’ve seen. You might have even thought, “I should try to recreate this with code”. Today is the day."
 */
 
 var side = 50; //size of square
