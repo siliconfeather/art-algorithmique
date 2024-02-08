@@ -6,19 +6,29 @@
     inpiration: genuary 25th prompt "If you like generative art, you probably have some photos on your phone of cool looking patterns, textures, shapes or things that you’ve seen. You might have even thought, “I should try to recreate this with code”. Today is the day."
 */
 
-//tesselation: pavage (escher), motifs
 
-var side = 70; //size of square
-var diag = Math.sqrt(side*side*2) //hypothénuse
+var side //size of square
+var diag //hypothénuse
 
 //possibilité de rotate un ou des éléments
 //repaire 0,0 en haut à gauche. Rotate tourne le repaire
 
-var margin = diag/2 
+var margin
 
 function setup() { 
 
     createCanvas(windowWidth, windowHeight); 
+
+    var ratio = windowWidth/windowHeight
+
+    if (ratio < 1)
+        side = windowHeight/25;
+    else
+        side = windowWidth/25; //size of square
+    diag = Math.sqrt(side*side*2) //hypothénuse
+    margin = diag/2 
+
+
     noLoop();
 } 
    
