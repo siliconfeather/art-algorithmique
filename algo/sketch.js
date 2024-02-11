@@ -13,6 +13,8 @@ var zoff = 0.0
 //possibilité de rotate un ou des éléments
 //repaire 0,0 en haut à gauche. Rotate tourne le repaire
 
+var nbSquares = 125
+
 var margin
 
 function setup() { 
@@ -22,9 +24,10 @@ function setup() {
     var ratio = windowWidth/windowHeight
 
     if (ratio < 1)
-        side = windowHeight/25;
+        side = windowHeight/nbSquares
+        ;
     else
-        side = windowWidth/25; //size of square
+        side = windowWidth/nbSquares; //size of square
 
     diag = Math.sqrt(side*side*2) //hypothénuse
     margin = 10
@@ -33,7 +36,7 @@ function setup() {
     xoff = 0.0
     incx = 0.2
     incy = 0.2
-    incz = 0.001
+    incz = 0.01
 
 } 
    
@@ -60,6 +63,7 @@ function draw() {
             angle = noise(xoff, yoff, zoff)
             if (alternate){
                 if(line){
+                    rotate(angle)
                     quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
                     line = false;
                     
@@ -71,7 +75,7 @@ function draw() {
             }
             else {
 
-                rotate(angle)
+                //rotate(angle)
                 quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
             }
         }
@@ -81,7 +85,7 @@ function draw() {
     }    
 
     //end of frame
-    zoff += 0.003;
+    zoff += 0.0003;
 } 
 
 
