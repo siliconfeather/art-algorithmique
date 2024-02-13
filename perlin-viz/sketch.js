@@ -6,8 +6,8 @@
 */
 
 
-var tesselate = false
-var rotateCanvas = false
+var tesselate = true
+var rotateCanvas = true
 var variability = 0.0003
 
 var xoff, yoff
@@ -64,16 +64,16 @@ function setup() {
 
 function draw() { 
 
+    
+
     fill(0, 0, 100, 250);
     background(0, 0, 0)
-
-//perlin noise 
 
     var lineNb = 0
 
     yoff = 0.0
     push()
-
+    translate(windowWidth/2, windowHeight/2)
     for (let y = margin; y < windowHeight; y += diag){
         //line or  y height
         xoff = 0.0
@@ -88,16 +88,8 @@ function draw() {
             if (rotateCanvas){
                 angle = noise(xoff, yoff, zoff)
                 rotate(angle)
-            }
-            
+            }       
 
-/*
-            if(linecolor[lineNb] % 2 == 0){
-                rotate(angle)
-            }else{ 
-                translate(x, y)
-            }
-*/
             quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
 
 
@@ -108,15 +100,20 @@ function draw() {
                 break;
             }
         }
+        if (rotateCanvas){
+                angle = noise(xoff, yoff, zoff)
+                rotate(angle)
+            }       
+
 
         yoff += incy
     }    
     pop()
     
 
+
+
 /*
-
-
 //rect for code variables
 //to have multiple canvases: instance mode 
 // https://github.com/processing/p5.js/wiki/Global-and-instance-mode
@@ -138,9 +135,9 @@ function draw() {
 
     }
 
-*/
+
     
-    
+    */
     
     
     //end of frame
