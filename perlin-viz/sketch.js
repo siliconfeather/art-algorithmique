@@ -15,11 +15,18 @@ var zoff = 0.0
 
 var nbSquares = 125
 
-var margin
+var fontsize = 35
+var textboxAscent, textboxDescent, textboxHeight
+
 
 function setup() { 
     colorMode(HSB, 360, 100, 100, 250);
     createCanvas(windowWidth, windowHeight); 
+
+    textSize(fontsize); 
+    textboxAscent = textAscent()
+    textboxDescent = textDescent()
+    textboxHeight = textboxAscent+textboxDescent
 
     var ratio = windowWidth/windowHeight
 
@@ -32,11 +39,10 @@ function setup() {
     diag = Math.sqrt(side*side*2) //hypothénuse
     margin = 10
 
-    yoff = 0.0
-    xoff = 0.0
-    incx = 0.2
-    incy = 0.2
-    incz = 0.01
+
+    incx = 42
+    incy = 10
+    incz = 0.1
 
 } 
    
@@ -49,9 +55,11 @@ function draw() {
     background(0, 0, 0)
 
 
-    off = 10
-    yoff = 0.0
+//perlin noise 
 
+
+    yoff = 0.0
+    push()
     for (let y = margin; y < (windowHeight-diag); y += diag){
         //line or  y height
         xoff = 0.0
@@ -59,7 +67,7 @@ function draw() {
             // column or x position
             xoff += incx
 
-            fill(noise(xoff, yoff, zoff), 50, 50, 180)
+            fill(0, 0, 100, 180)
 
             angle = noise(xoff, yoff, zoff)
 
@@ -69,9 +77,33 @@ function draw() {
 
         yoff += incy
     }    
-
+    pop()
     fill(0, 0, 100, 250)
-    rect(windowWidth/3*2, 0, windowWidth/3, windowHeight)
+
+//rect for code variables
+//to have multiple
+
+    //rectangle location
+    var rectMargin = 80
+    var rectX = windowWidth/3*2-rectMargin
+    var rectY = windowHeight/3+rectMargin
+    var rectWidth = windowWidth/3-rectMargin*2
+    var rectHeight = windowHeight/3*2-rectMargin*2
+
+    rect(rectX, rectY, rectWidth, rectHeight)
+
+    fill(0, 100, 0, 250)
+
+    for (let textboxY = rectY; textboxY < (rectY + rectHeight); textboxY += textboxHeight){
+        text(String(noise(xoff, yoff, zoff)), rectX+50, textboxY )
+
+    }
+
+
+    
+    
+    
+    
     //end of frame
     zoff += 0.0003;
 } 
