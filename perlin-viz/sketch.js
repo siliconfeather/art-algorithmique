@@ -13,7 +13,7 @@ var zoff = 0.0
 //possibilité de rotate un ou des éléments
 //repaire 0,0 en haut à gauche. Rotate tourne le repaire
 
-var nbSquares = 125
+var nbSquares = 25
 
 var fontsize = 35
 var textboxAscent, textboxDescent, textboxHeight
@@ -42,7 +42,7 @@ function setup() {
 
     incx = 42
     incy = 10
-    incz = 0.1
+    incz = 0.5
 
 } 
    
@@ -67,12 +67,18 @@ function draw() {
             // column or x position
             xoff += incx
 
-            fill(0, 0, 100, 180)
+            fill(0, 0, 100, 250)
 
             angle = noise(xoff, yoff, zoff)
 
+            translate(x, y)
+
             rotate(angle)
+
             quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
+
+        fill(0, 0, 100, 180)
+            text(String(noise(xoff, yoff, zoff)), x, y )
         }
 
         yoff += incy
@@ -82,7 +88,7 @@ function draw() {
 
 //rect for code variables
 //to have multiple
-
+/*
     //rectangle location
     var rectMargin = 80
     var rectX = windowWidth/3*2-rectMargin
@@ -99,12 +105,12 @@ function draw() {
 
     }
 
-
+*/
     
     
     
     
     //end of frame
-    zoff += 0.0003;
+    zoff += 0.0008;
 } 
 
