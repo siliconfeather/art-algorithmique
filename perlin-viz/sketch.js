@@ -19,7 +19,7 @@ var margin
 
 function setup() { 
     colorMode(HSB, 360, 100, 100, 250);
-    createCanvas(windowWidth/2, windowHeight); 
+    createCanvas(windowWidth, windowHeight); 
 
     var ratio = windowWidth/windowHeight
 
@@ -47,12 +47,11 @@ function draw() {
 
     fill(0, 0, 100, 250);
     background(0, 0, 0)
-    
-    let line = true; 
-    let alternate = false;
+
 
     off = 10
     yoff = 0.0
+
     for (let y = margin; y < (windowHeight-diag); y += diag){
         //line or  y height
         xoff = 0.0
@@ -60,30 +59,19 @@ function draw() {
             // column or x position
             xoff += incx
 
-            angle = noise(xoff, yoff, zoff)
-            if (alternate){
-                if(line){
-                    rotate(angle)
-                    quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
-                    line = false;
-                    
-                }
-                else {
-                    line = true
-                    
-                }
-            }
-            else {
+            fill(noise(xoff, yoff, zoff), 50, 50, 180)
 
-                rotate(angle)
-                quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
-            }
+            angle = noise(xoff, yoff, zoff)
+
+            rotate(angle)
+            quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
         }
-        alternate = !alternate
-        line = true
+
         yoff += incy
     }    
 
+    fill(0, 0, 100, 250)
+    rect(windowWidth/3*2, 0, windowWidth/3, windowHeight)
     //end of frame
     zoff += 0.0003;
 } 
