@@ -1,17 +1,25 @@
 /*
-    title: Visualizing Perlin noise
+    title: Perlin noise rotation on tessalation
     author: LenaMK
     date: 2023-02-12
     description: 
 */
 
+
+var tesselate = false
+var rotateCanvas = false
+var variability = 0.0003
+
+var xoff, yoff
+var incx = 0.55
+var incy = 0.05
+var incz = 2.5
+var zoff = 0.0
+
 var side //size of square
 var diag //hypothénuse
 
-var xoff, yoff, incx, incy, incz
-var zoff = 0.0
-//possibilité de rotate un ou des éléments
-//repaire 0,0 en haut à gauche. Rotate tourne le repaire
+
 
 var nbSquares = 25
 
@@ -20,7 +28,11 @@ var textboxAscent, textboxDescent, textboxHeight
 
 var linecolor=[]
 
+
 function setup() { 
+
+
+
     colorMode(HSB, 360, 100, 100, 250);
     createCanvas(windowWidth, windowHeight); 
 
@@ -31,23 +43,19 @@ function setup() {
 
     var ratio = windowWidth/windowHeight
 
+    //size of square
     if (ratio < 1)
         side = windowHeight/nbSquares
         ;
     else
-        side = windowWidth/nbSquares; //size of square
+        side = windowWidth/nbSquares; 
 
     diag = Math.sqrt(side*side*2) //hypothénuse
     margin = 10
 
-
-    incx = 0.05
-    incy = 0.05
-    incz = 0.25
-
     var nblines = windowHeight/diag
 
-    for (let i = 0; i < nblines; i++){
+    for (let i = 0; i <= nblines; i++){
         linecolor[i] = random(360)
     }
 } 
@@ -55,11 +63,9 @@ function setup() {
    
 
 function draw() { 
-     
 
     fill(0, 0, 100, 250);
     background(0, 0, 0)
-
 
 //perlin noise 
 
@@ -68,22 +74,23 @@ function draw() {
     yoff = 0.0
     push()
 
-    for (let y = margin; y < (windowHeight-diag); y += diag){
+    for (let y = margin; y < windowHeight; y += diag){
         //line or  y height
         xoff = 0.0
 
         lineNb += 1
-        console.log(lineNb)
-
         //lines
-        for ( let x = margin; x < (windowWidth-diag); x += diag){ 
+        for ( let x = margin; x < windowWidth; x += diag){ 
 
             xoff += incx
-            fill(linecolor[lineNb], 50, 50, 250)
+            fill(linecolor[lineNb], 80, 80, 250)
+            
+            if (rotateCanvas){
+                angle = noise(xoff, yoff, zoff)
+                rotate(angle)
+            }
             
 
-            angle = noise(xoff, yoff, zoff)
-            rotate(angle)
 /*
             if(linecolor[lineNb] % 2 == 0){
                 rotate(angle)
@@ -96,6 +103,10 @@ function draw() {
 
             fill(0, 0, 100, 180)
             text(String(noise(xoff, yoff, zoff)), x, y )
+
+            if (!tesselate){
+                break;
+            }
         }
 
         yoff += incy
@@ -133,6 +144,6 @@ function draw() {
     
     
     //end of frame
-    zoff += 0.0008;
+    zoff += variability;
 } 
 
