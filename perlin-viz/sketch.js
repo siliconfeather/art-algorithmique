@@ -18,6 +18,7 @@ var nbSquares = 25
 var fontsize = 35
 var textboxAscent, textboxDescent, textboxHeight
 
+var linecolor=[]
 
 function setup() { 
     colorMode(HSB, 360, 100, 100, 250);
@@ -40,10 +41,15 @@ function setup() {
     margin = 10
 
 
-    incx = 42
-    incy = 10
-    incz = 0.5
+    incx = 0.05
+    incy = 0.05
+    incz = 0.25
 
+    var nblines = windowHeight/diag
+
+    for (let i = 0; i < nblines; i++){
+        linecolor[i] = random(360)
+    }
 } 
    
    
@@ -57,38 +63,54 @@ function draw() {
 
 //perlin noise 
 
+    var lineNb = 0
 
     yoff = 0.0
     push()
+
     for (let y = margin; y < (windowHeight-diag); y += diag){
         //line or  y height
         xoff = 0.0
-        for ( let x = margin; x < (windowWidth-diag); x += diag){ 
-            // column or x position
-            xoff += incx
 
-            fill(0, 0, 100, 250)
+        lineNb += 1
+        console.log(lineNb)
+
+        //lines
+        for ( let x = margin; x < (windowWidth-diag); x += diag){ 
+
+            xoff += incx
+            fill(linecolor[lineNb], 50, 50, 250)
+            
 
             angle = noise(xoff, yoff, zoff)
-
-            translate(x, y)
-
             rotate(angle)
-
+/*
+            if(linecolor[lineNb] % 2 == 0){
+                rotate(angle)
+            }else{ 
+                translate(x, y)
+            }
+*/
             quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
 
-        fill(0, 0, 100, 180)
+
+            fill(0, 0, 100, 180)
             text(String(noise(xoff, yoff, zoff)), x, y )
         }
 
         yoff += incy
     }    
     pop()
-    fill(0, 0, 100, 250)
+    
+
+/*
+
 
 //rect for code variables
-//to have multiple
-/*
+//to have multiple canvases: instance mode 
+// https://github.com/processing/p5.js/wiki/Global-and-instance-mode
+
+    fill(0, 0, 100, 250)
     //rectangle location
     var rectMargin = 80
     var rectX = windowWidth/3*2-rectMargin
