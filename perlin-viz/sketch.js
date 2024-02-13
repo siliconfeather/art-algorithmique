@@ -7,7 +7,7 @@
 
 
 var tesselate = true
-var rotateCanvas = true
+var rotateCanvas = false
 var variability = 0.0003
 
 var xoff, yoff
@@ -60,8 +60,10 @@ function setup() {
     }
 } 
    
-   
-
+/*suggestions
+- travailler sur le ton pour évolution
+- real tiles (no empty spaces),movement at the scale of the tile
+*/
 function draw() { 
 
     
@@ -73,11 +75,13 @@ function draw() {
 
     yoff = 0.0
     push()
-    translate(windowWidth/2, windowHeight/2)
+    //translate(windowWidth/2, windowHeight/2)
     for (let y = margin; y < windowHeight; y += diag){
         //line or  y height
         xoff = 0.0
 
+        //stroke(linecolor[lineNb], 80, 80, 250)
+        //line(0, y, windowWidth/2, y)
         lineNb += 1
         //lines
         for ( let x = margin; x < windowWidth; x += diag){ 
@@ -94,7 +98,7 @@ function draw() {
 
 
             fill(0, 0, 100, 180)
-            text(String(noise(xoff, yoff, zoff)), x, y )
+            //text(String(noise(xoff, yoff, zoff)), x, y )
 
             if (!tesselate){
                 break;
@@ -143,4 +147,3 @@ function draw() {
     //end of frame
     zoff += variability;
 } 
-
