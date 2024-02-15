@@ -7,6 +7,7 @@
 
 
 var vermeer = true
+var showStroke = false
 
 var xoff, yoff
 var incx = 0.55
@@ -52,18 +53,14 @@ function setup() {
     diag = Math.sqrt(side*side*2) //hypothénuse
     margin = 50
 
-    var nblines = windowHeight/diag
-
-    for (let i = 0; i <= nblines; i++){
-        linecolor[i] = random(360)
-    }
+    if (showStroke)
+        stroke(0, 0, 50, 250)
 } 
    
 
 function makeTile (x, y, size){
     fill(0, 0, 100, 250);
-    stroke(0, 0, 50, 250)
-
+    
     rect(x, y, size, size);
 
     var small = Math.sqrt(size/4*size/4*2)
@@ -83,7 +80,13 @@ function makeTile (x, y, size){
         }
     }       
 
-    //if (vermeer)
+    if (vermeer){
+        push()
+            rectMode(CENTER);
+            rect(x+size/2, y+size/2, size/2, size/2);
+        pop()
+    }
+
 
     ///quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)                                                                                  
     //quad(x+diag/4, y, x+diag, y+diag, x+diag/2, y+diag, x-diag/2, y+diag/2)
