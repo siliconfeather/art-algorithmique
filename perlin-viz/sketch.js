@@ -32,6 +32,7 @@ function setup() {
 
 
     colorMode(HSB, 360, 100, 100, 250);
+    angleMode(DEGREES)
     createCanvas(windowWidth, windowHeight); 
 
     textSize(fontsize); 
@@ -62,16 +63,21 @@ function setup() {
 function makeTile (x, y, size){
     fill(0, 0, 100, 250);
     stroke(0, 0, 50, 250)
-    var small = size/4
+
     rect(x, y, size, size);
-    
+
+    var small = Math.sqrt(size/4*size/4*2)
+
     fill(0, 0, 0, 250);
-    for (let i = 1; i<3; i++){ 
-        for (let j = 1; j<3; j++){
+    for (let i = 1; i<=3; i+=2){ 
+        for (let j = 1; j<=3; j+=2){
             push();
-                translate(x+small*j, y+small*i)
+                rectMode(CENTER);
+                translate(x+size*j/4, y+size*i/4)
                 rotate(45);
                 rect(0, 0, small, small)
+
+                
             pop();
             
         }
