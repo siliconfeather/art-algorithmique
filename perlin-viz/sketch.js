@@ -9,7 +9,7 @@
 var vermeer = true
 var rotateTiles = true
 var showStroke = false
-var tileOverflow = true
+var tileOverflow = false
 
 var xoff, yoff
 var incx = 0.55
