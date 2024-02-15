@@ -14,7 +14,7 @@ var tileOverflow = true
 var xoff, yoff
 var incx = 0.55
 var incy = 0.05
-var incz = 2.5
+var incz = 0.2
 var zoff = 0.0
 var variance = 0.002
 
@@ -56,7 +56,7 @@ function setup() {
 } 
    
 
-function makeTile (x, y, size){
+function makeTile (x, y, size, xoff, yoff, zoff){
     //var localangle = noise(xoff, yoff, zoff)
     //console.log(localangle)
     fill(0, 0, 100, 250);
@@ -112,11 +112,12 @@ function makeTile (x, y, size){
                 rect(size/2, size/2, size/2, size/2);
             pop()
         }
-        
+
     //rotate
     //text(String(angle)), x, y )
     if (rotateTiles){
         //center of the tile
+        angle = noise(xoff, yoff, zoff) 
         console.log(angle)
         translate(size/2, size/2)
         rotate(angle)
@@ -145,8 +146,8 @@ function draw() {
         for ( let x = margin; x < windowWidth-diag-margin; x += diag){ 
             xoff += incx
 
-            angle = noise(xoff, yoff, zoff)
-            makeTile(x, y, diag)
+            //
+            makeTile(x, y, diag, xoff, yoff, zoff)
    
       
         }
