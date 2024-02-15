@@ -8,6 +8,7 @@
 
 var vermeer = true
 var showStroke = false
+var tileOverflow = true
 
 var xoff, yoff
 var incx = 0.55
@@ -55,13 +56,18 @@ function setup() {
 
     if (showStroke)
         stroke(0, 0, 50, 250)
+    else
+        noStroke()
 } 
    
 
 function makeTile (x, y, size){
     fill(0, 0, 100, 250);
-    
-    rect(x, y, size, size);
+
+    push()//translate canvas to tile location
+    translate(x, y)
+
+    rect(0, 0, size, size);
 
     var small = Math.sqrt(size/4*size/4*2)
 
@@ -70,7 +76,7 @@ function makeTile (x, y, size){
         for (let j = 1; j<=3; j+=2){
             push();
                 rectMode(CENTER);
-                translate(x+size*j/4, y+size*i/4)
+                translate(size*j/4, size*i/4)
                 rotate(45);
                 rect(0, 0, small, small)
 
@@ -80,6 +86,27 @@ function makeTile (x, y, size){
         }
     }       
 
+    //make sure not to draw outside the canvas
+    if (tileOverflow){
+        fill(0, 0, 100, 250);
+
+        for (let i = 0; i<=4; i+=2){ 
+            for (let j = 0; j<=4; j+=2){
+                push();
+                    rectMode(CENTER);
+                    translate(diag/4*j, diag/4*i)
+                    rotate(45);
+                    rect(0, 0, small, small)
+
+                    
+                pop();
+                
+            }
+        }
+        pop()
+    }
+
+    fill(0, 0, 0, 250);
     if (vermeer){
         push()
             rectMode(CENTER);
@@ -90,6 +117,7 @@ function makeTile (x, y, size){
 
     ///quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)                                                                                  
     //quad(x+diag/4, y, x+diag, y+diag, x+diag/2, y+diag, x-diag/2, y+diag/2)
+    pop()
 }
 
 /*suggestions
@@ -98,11 +126,7 @@ function makeTile (x, y, size){
 */
 function draw() { 
 
-    
-
     fill(0, 0, 100, 250);
-
-    var lineNb = 0
 
     yoff = 0.0
 
@@ -110,40 +134,22 @@ function draw() {
         //line or  y height
         xoff = 0.0
 
-        //stroke(linecolor[lineNb], 80, 80, 250)
-        //line(0, y, windowWidth/2, y)
-        lineNb += 1
         //lines
         for ( let x = margin; x < windowWidth-diag-margin; x += diag){ 
             
             xoff += incx
             makeTile(x, y, diag)
             /*
-            fill(linecolor[lineNb], 80, 80, 250)
-            
-            if (rotateCanvas){
                 angle = noise(xoff, yoff, zoff)
                 rotate(angle)
-            }       
+            */      
 
-            quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
-
-
-            fill(0, 0, 100, 180)
+           
             //text(String(noise(xoff, yoff, zoff)), x, y )
 
-            if (!tesselate){
-                break;
-            }
-            */
+            
         }
-        /*
-        if (rotateCanvas){
-                angle = noise(xoff, yoff, zoff)
-                rotate(angle)
-            }       
-
-        */
+        
         yoff += incy
     }    
    
