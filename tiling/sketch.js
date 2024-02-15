@@ -5,9 +5,10 @@
     description: 
 */
 
+var looping = false
 
 var vermeer = true
-var rotateTiles = true
+var rotateTiles = false
 var showStroke = false
 var tileOverflow = false
 var recursion = true
@@ -56,9 +57,8 @@ function setup() {
     else
         noStroke()
 
-
-
-    noLoop()
+    if (!looping)
+        noLoop()
 } 
    
 
