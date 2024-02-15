@@ -6,9 +6,7 @@
 */
 
 
-var tesselate = true
-var rotateCanvas = false
-var variability = 0.0003
+var vermeer = true
 
 var xoff, yoff
 var incx = 0.55
@@ -21,7 +19,7 @@ var diag //hypothénuse
 
 
 
-var nbSquares = 25
+var nbSquares = 12
 
 var fontsize = 35
 var textboxAscent, textboxDescent, textboxHeight
@@ -61,11 +59,28 @@ function setup() {
 } 
    
 
-function makeTile (x, y){
+function makeTile (x, y, size){
+    fill(0, 0, 100, 250);
+    stroke(0, 0, 50, 250)
+    var small = size/4
+    rect(x, y, size, size);
+    
     fill(0, 0, 0, 250);
-    stroke(0, 0, 100, 250)
-    rect(x, y, diag, diag)                                                                                                                                                                                                                                                                                                                                                                           
-    quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)
+    for (let i = 1; i<3; i++){ 
+        for (let j = 1; j<3; j++){
+            push();
+                translate(x+small*j, y+small*i)
+                rotate(45);
+                rect(0, 0, small, small)
+            pop();
+            
+        }
+    }       
+
+    //if (vermeer)
+
+    ///quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)                                                                                  
+    //quad(x+diag/4, y, x+diag, y+diag, x+diag/2, y+diag, x-diag/2, y+diag/2)
 }
 
 /*suggestions
@@ -82,7 +97,7 @@ function draw() {
 
     yoff = 0.0
 
-    for (let y = margin; y < windowHeight; y += diag){
+    for (let y = margin; y < windowHeight-diag-margin; y += diag){
         //line or  y height
         xoff = 0.0
 
@@ -90,10 +105,10 @@ function draw() {
         //line(0, y, windowWidth/2, y)
         lineNb += 1
         //lines
-        for ( let x = margin; x < windowWidth; x += diag){ 
+        for ( let x = margin; x < windowWidth-diag-margin; x += diag){ 
             
             xoff += incx
-            makeTile(x, y)
+            makeTile(x, y, diag)
             /*
             fill(linecolor[lineNb], 80, 80, 250)
             
