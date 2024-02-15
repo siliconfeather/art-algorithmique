@@ -9,7 +9,7 @@
 var vermeer = true
 var rotateTiles = true
 var showStroke = false
-var tileOverflow = false
+var tileOverflow = true
 
 var xoff, yoff
 var incx = 0.55
@@ -28,15 +28,8 @@ var nbSquares = 12
 var fontsize = 35
 var textboxAscent, textboxDescent, textboxHeight
 
-var linecolor=[]
-
-
 function setup() { 
-
-
-
     colorMode(HSB, 360, 100, 100, 250);
-    
     createCanvas(windowWidth, windowHeight); 
 
     textSize(fontsize); 
@@ -89,9 +82,7 @@ function makeTile (x, y, size){
                     angleMode(DEGREES)
                     translate(size*j/4, size*i/4)
                     rotate(45);
-                    rect(0, 0, small, small)
-
-                    
+                    rect(0, 0, small, small)                   
                 pop();
                 
             }
@@ -112,7 +103,6 @@ function makeTile (x, y, size){
                     
                 }
             }
-            pop()
         }
     //vermeer style fill
         fill(0, 0, 0, 250);
@@ -122,16 +112,19 @@ function makeTile (x, y, size){
                 rect(size/2, size/2, size/2, size/2);
             pop()
         }
-
+        
     //rotate
     //text(String(angle)), x, y )
-        if (rotateTiles){
-            //center of the tile
-            translate(size/2, size/2)
-            rotate(angle)
-        }
+    if (rotateTiles){
+        //center of the tile
+        console.log(angle)
+        translate(size/2, size/2)
+        rotate(angle)
+    }
+
 
     pop()
+    
 }
 
 /*suggestions
@@ -159,7 +152,10 @@ function draw() {
         }
         
         yoff += incy
-    }    
+    } 
+    
+    //proof that it loops
+    ///circle(mouseX, mouseY, 50); 
    
     //end of frame
     zoff += variance;
