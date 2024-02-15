@@ -7,8 +7,9 @@
 
 
 var vermeer = true
+var rotateTiles = true
 var showStroke = false
-var tileOverflow = true
+var tileOverflow = false
 
 var xoff, yoff
 var incx = 0.55
@@ -34,7 +35,7 @@ function setup() {
 
 
     colorMode(HSB, 360, 100, 100, 250);
-    angleMode(DEGREES)
+    
     createCanvas(windowWidth, windowHeight); 
 
     textSize(fontsize); 
@@ -62,39 +63,30 @@ function setup() {
    
 
 function makeTile (x, y, size){
+    //var localangle = noise(xoff, yoff, zoff)
+    //console.log(localangle)
     fill(0, 0, 100, 250);
 
-    push()//translate canvas to tile location
-    translate(x, y)
 
-    rect(0, 0, size, size);
+    
+      
+//translate canvas to tile location            
+    push()
+        translate(x, y)
+    //make tile
 
-    var small = Math.sqrt(size/4*size/4*2)
+        rect(0, 0, size, size); //white square basis
 
-    fill(0, 0, 0, 250);
-    for (let i = 1; i<=3; i+=2){ 
-        for (let j = 1; j<=3; j+=2){
-            push();
-                rectMode(CENTER);
-                translate(size*j/4, size*i/4)
-                rotate(45);
-                rect(0, 0, small, small)
+        var small = Math.sqrt(size/4*size/4*2)
 
-                
-            pop();
-            
-        }
-    }       
-
-    //make sure not to draw outside the canvas
-    if (tileOverflow){
-        fill(0, 0, 100, 250);
-
-        for (let i = 0; i<=4; i+=2){ 
-            for (let j = 0; j<=4; j+=2){
+        //black square fill
+        fill(0, 0, 0, 250);
+        for (let i = 1; i<=3; i+=2){ 
+            for (let j = 1; j<=3; j+=2){
                 push();
                     rectMode(CENTER);
-                    translate(diag/4*j, diag/4*i)
+                    angleMode(DEGREES)
+                    translate(size*j/4, size*i/4)
                     rotate(45);
                     rect(0, 0, small, small)
 
@@ -102,21 +94,42 @@ function makeTile (x, y, size){
                 pop();
                 
             }
+        }     
+
+    //overflow
+        if (tileOverflow){
+            fill(0, 0, 100, 250);
+
+            for (let i = 0; i<=4; i+=2){ 
+                for (let j = 0; j<=4; j+=2){
+                    push();
+                        rectMode(CENTER);
+                        translate(diag/4*j, diag/4*i)
+                        rotate(45);
+                        rect(0, 0, small, small)    
+                    pop();
+                    
+                }
+            }
+            pop()
         }
-        pop()
-    }
+    //vermeer style fill
+        fill(0, 0, 0, 250);
+        if (vermeer){
+            push()
+                rectMode(CENTER);
+                rect(size/2, size/2, size/2, size/2);
+            pop()
+        }
 
-    fill(0, 0, 0, 250);
-    if (vermeer){
-        push()
-            rectMode(CENTER);
-            rect(x+size/2, y+size/2, size/2, size/2);
-        pop()
-    }
+    //rotate
+    //text(String(angle)), x, y )
+        if (rotateTiles){
+            //center of the tile
+            translate(size/2, size/2)
+            rotate(angle)
+        }
 
-
-    ///quad(x, y, x+diag/2, y+diag/2, x, y+diag, x-diag/2, y+diag/2)                                                                                  
-    //quad(x+diag/4, y, x+diag, y+diag, x+diag/2, y+diag, x-diag/2, y+diag/2)
     pop()
 }
 
@@ -136,18 +149,14 @@ function draw() {
 
         //lines
         for ( let x = margin; x < windowWidth-diag-margin; x += diag){ 
+            angle = noise(xoff, yoff, zoff)
+            makeTile(x, y, diag)
+            
+            
             
             xoff += incx
-            makeTile(x, y, diag)
-            /*
-                angle = noise(xoff, yoff, zoff)
-                rotate(angle)
-            */      
-
-           
-            //text(String(noise(xoff, yoff, zoff)), x, y )
-
             
+      
         }
         
         yoff += incy
