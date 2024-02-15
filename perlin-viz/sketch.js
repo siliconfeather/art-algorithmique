@@ -16,6 +16,7 @@ var incx = 0.55
 var incy = 0.05
 var incz = 2.5
 var zoff = 0.0
+var variance = 0.002
 
 var side //size of square
 var diag //hypothénuse
@@ -139,23 +140,21 @@ function makeTile (x, y, size){
 */
 function draw() { 
 
+    background(0, 0, 0)
     fill(0, 0, 100, 250);
 
     yoff = 0.0
 
     for (let y = margin; y < windowHeight-diag-margin; y += diag){
-        //line or  y height
+        
         xoff = 0.0
 
-        //lines
         for ( let x = margin; x < windowWidth-diag-margin; x += diag){ 
+            xoff += incx
+
             angle = noise(xoff, yoff, zoff)
             makeTile(x, y, diag)
-            
-            
-            
-            xoff += incx
-            
+   
       
         }
         
@@ -163,5 +162,5 @@ function draw() {
     }    
    
     //end of frame
-    zoff += variability;
+    zoff += variance;
 } 
