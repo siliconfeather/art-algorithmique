@@ -6,9 +6,9 @@
 */
 
 
-var vermeer = true
+var vermeer = false
 var rotateTiles = true
-var showStroke = false
+var showStroke = true
 var tileOverflow = false
 
 var xoff, yoff
