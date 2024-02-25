@@ -2,7 +2,8 @@
     title: 
     author: LenaMK
     date: 2023-02-24
-    description: r
+    description: 
+    notes: still buggy, looses background on click and sometimes stops
 
 */
 
