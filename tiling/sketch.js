@@ -5,7 +5,7 @@
     description: 
 */
 
-var looping = false
+var looping = true
 
 var vermeer = true
 var rotateTiles = false
@@ -34,7 +34,7 @@ var textboxAscent, textboxDescent, textboxHeight
 function setup() { 
     colorMode(HSB, 360, 100, 100, 250);
     createCanvas(windowWidth, windowHeight); 
-
+    frameRate(1)
     textSize(fontsize); 
     textboxAscent = textAscent()
     textboxDescent = textDescent()
