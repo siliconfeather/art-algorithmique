@@ -9,9 +9,10 @@
 
 var importedObject, data
 
-var minLat, minLong, maxLat, maxLong
+var minLat, minLong, maxLat, maxLong, minYear, maxYear
+var maxColor = 100
+var minColor = 10
 
-var mapPadding = 0.3
 
 function preload() {
     importedObject = loadJSON("data.json")
@@ -31,21 +32,27 @@ function setup() {
     //order by produced_at = from older to newest
     data.sort((a, b) => {
         return b.produced_at - a.produced_at;
-    }).reverse().splice(0, 3) //removes the 3 artworks without date
+    }).splice(data.length-3, data.length-3) //removes the 3 artworks without date
     
     //note to self: how many works by men don't have dates? 3 from 279 that's many, even more if you redure to artpubmtl source
+
+    minYear = Math.min(...data.map(item => item.produced_at))
+    maxYear = Math.max(...data.map(item => item.produced_at))
 
     //canvas is around MTL, the rest won't be visible
     // no need to remove them, there are very few anyway
 
+    //approx ref, then manually centered on the selected data
     //https://www.openstreetmap.org/#map=10/45.3637/-74.0575
     //https://www.openstreetmap.org/#map=10/45.7752/-73.4312
-    minLat = 45.7752
-    maxLat = 45.3637
-    minLong = -74.0575
-    maxLong = -73.4312
+    minLat = 45.68
+    maxLat = 45.39
+    minLong = -73.95
+    maxLong = -73.4
+
 /* min max from the data set
 
+    var mapPadding = 0.1
     minLat = Math.min(...data.map(item => item.location.lat))-mapPadding
     maxLat = Math.max(...data.map(item => item.location.lat))+mapPadding
     minLong = Math.min(...data.map(item => item.location.lng))-mapPadding
@@ -71,8 +78,8 @@ function setup() {
 
     //console.log(data.map(d => d.produced_at))
 
-    noLoop
-
+    //frameRate(1)
+    noLoop()
 } 
 
 
@@ -91,8 +98,11 @@ function getPosition(lat, long){
     return [x, y]
 }
 
-
-
+function colorScale(year){
+    var result = map(year, minYear, maxYear, maxColor, minColor)
+    console.log(result)
+    return result
+}
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
@@ -106,10 +116,25 @@ function draw() {
 
 
     data.forEach(d => {
-        var location = getPosition(d.location.lat, d.location.lng)
-        circle(location[0], location[1], 5)
-        text(d.title.fr, location[0], location[1])
 
+        var location = getPosition(d.location.lat, d.location.lng)
+
+        noStroke()
+        fill(341, colorScale(d.produced_at), 67, 120)
+
+        circle(location[0], location[1], 15)
+        //text(d.title.fr, location[0], location[1])
+
+        var current = data.indexOf(d)        
+
+        
+        if(current > 0){
+            stroke(0, 0, 100, 65)
+            var previouslocation = getPosition(data[current-1].location.lat, data[current-1].location.lng)
+
+            line(previouslocation[0], previouslocation[1], location[0], location[1]) 
+        }
+                   
         
     });
 
