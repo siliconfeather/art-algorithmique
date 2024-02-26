@@ -100,7 +100,7 @@ function getPosition(lat, long){
 
 function colorScale(year){
     var result = map(year, minYear, maxYear, maxColor, minColor)
-    console.log(result)
+
     return result
 }
 
@@ -122,15 +122,30 @@ function draw() {
         noStroke()
         fill(341, colorScale(d.produced_at), 67, 120)
 
-        circle(location[0], location[1], 15)
+        circle(location[0], location[1], 8)
         //text(d.title.fr, location[0], location[1])
 
         var current = data.indexOf(d)        
 
         
         if(current > 0){
-            stroke(0, 0, 100, 65)
+            noFill()
+            stroke(0, 0, 100, 165)
+
             var previouslocation = getPosition(data[current-1].location.lat, data[current-1].location.lng)
+
+            //width = distance between two locations
+            var arcWidth = dist(previouslocation[0], previouslocation[1], location[0], location[1]) 
+            console.log("arcWidth", arcWidth)
+
+
+            var arcHeight = (data[current-1].produced_at-d.produced_at)
+            console.log("arcHeight", arcHeight)
+
+            //arc(previouslocation[0], previouslocation[1], arcWidth, arcHeight, PI / 2, 3 * PI / 2)
+
+            //arc((x, y), width, height, start, stop)
+            //arc((105, 105), 100, 50, PI / 2, 3 * PI / 2)
 
             line(previouslocation[0], previouslocation[1], location[0], location[1]) 
         }
