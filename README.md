@@ -29,4 +29,5 @@ Quelques tentatives à jouer avec des algorithms
 Plusieurs tests: 
 - [Titres (au hasard) d'œuvres réalisées par des femmes](./artistes-femmes-MONA/)
 - [Web of women](./web-of-women/)
+- [Figures historiques](./figures-historiques/)
 
