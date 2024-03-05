@@ -3,11 +3,14 @@
     author: LenaMK
     date: 2023-02-24
     description: 
+    data source: https://observablehq.com/@maison-mona/preparation-reconciliation?collection=@maison-mona/gender-analysis
     notes: still buggy, looses background on click and sometimes stops
 
 */
 
 var importedObject, data
+
+var randomMax //to randomize the maximum shown artworks. Make sure it removes newer artworks, not historical ones. Move the filter to setup!
 
 var minLat, minLong, maxLat, maxLong, minYear, maxYear
 var maxColor = 100
@@ -80,6 +83,8 @@ function setup() {
 
     //frameRate(1)
     noLoop()
+
+    randomMax = random(10, 276)
 } 
 
 
@@ -113,23 +118,26 @@ function draw() {
         
     fill(0, 0, 100, 250)
 
+    //TIME 
+    //put timer in data loop
+    //time variable, compteur de temps ex: 1 an = 360 frames
+    //temps courant: frames since start of the piece (modulo)
+    //si on veut que ça se dessine au fur et à mesure → diviser la distance à faire par le nombre de frames ...
 
-
-    data.forEach(d => {
+    data.slice(0,randomMax).forEach(d => {
 
         var location = getPosition(d.location.lat, d.location.lng)
 
         noStroke()
         fill(341, colorScale(d.produced_at), 67, 120)
 
-        circle(location[0], location[1], 8)
+        //circle(location[0], location[1], 18)
         //text(d.title.fr, location[0], location[1])
 
         var current = data.indexOf(d)        
 
         
         if(current > 0){
-            noFill()
             stroke(0, 0, 100, 165)
 
             var previouslocation = getPosition(data[current-1].location.lat, data[current-1].location.lng)
@@ -139,12 +147,23 @@ function draw() {
             console.log("arcWidth", arcWidth)
 
 
-            var arcHeight = (data[current-1].produced_at-d.produced_at)
+            var arcHeight = ((data[current-1].produced_at-d.produced_at)+1)*100
             console.log("arcHeight", arcHeight)
 
-            //arc(previouslocation[0], previouslocation[1], arcWidth, arcHeight, PI / 2, 3 * PI / 2)
+            /*    
+
+            push()
+                noFill()
+                angleMode(DEGREES)
+                translate(previouslocation[0], previouslocation[1])
+                var startAngle = 0
+                var stopAngle = 180
+                arc(arcWidth/2, 0, arcWidth, arcHeight, startAngle, stopAngle)
+            pop()
+            */
 
             //arc((x, y), width, height, start, stop)
+            //from Python docs https://p5.readthedocs.io/en/latest/install.html
             //arc((105, 105), 100, 50, PI / 2, 3 * PI / 2)
 
             line(previouslocation[0], previouslocation[1], location[0], location[1]) 
