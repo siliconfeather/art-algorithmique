@@ -9,11 +9,12 @@
 
 var showEllipse = false
 var volTranslate = false
-var showCircleViz = true
+var showCircleViz = false
 
 //to use these, I would need to store the history on a file and get it (preload (would it lag?), make sure it's empty before starting a test) to be able to change the values without losing the history.
 
-var mic, amp, vol, volHistoryMax
+var mic, vol, fft, spectrum
+var volHistoryMax
 var volHistory = []
 var ampHistory = []
 
@@ -25,8 +26,11 @@ function setup() {
     mic = new p5.AudioIn()
     mic.start()
 
-    amp = new p5.Amplitude()
-    amp.setInput(mic)
+    fft = new p5.FFT()
+    //
+
+    //amp = new p5.Amplitude()
+    //amp.setInput(mic)
 } 
 
 
@@ -89,32 +93,39 @@ function circleViz(){
     pop()
 }
 
-
+function frequencyViz(){
+    
+}
 
 function draw() { 
      
     background(0, 0, 0);   
 
     vol = mic.getLevel()
+    //mic.getLevel is the same thing as having the amp of mic...
+
+    spectrum = fft.analyze()
 
     volHistory.push(vol*10)
-    ampHistory.push(amp.getLevel()*10)
     
     if (showCircleViz)
         volHistoryMax = 360
     else
         volHistoryMax = windowWidth-100
 
+    
     if (volHistory.length > volHistoryMax){
         volHistory.splice(0,1)
     }
 
 
-    text("Amp * 100",windowWidth-200, windowHeight-70) 
-    text(amp.getLevel()*100, windowWidth-200, windowHeight-50); 
-
+    fill(0, 0, 100, 250)    
     text("vol * 10", windowWidth-200, windowHeight-120) 
     text(vol*10, windowWidth-200, windowHeight-100); 
+
+    //need to finish this: https://www.youtube.com/watch?v=2O3nm0Nvbi4&list=PLRqwX-V7Uu6aFcVjlDAkkGIixw70s7jpW&index=11
+    text("FFT spectrum", windowWidth-200, windowHeight-70) 
+    text(spectrum.length, windowWidth-200, windowHeight-50); 
 
     if (showEllipse) {
         mouthEllipse()
@@ -122,8 +133,8 @@ function draw() {
 
     if (showCircleViz)
         circleViz()
-
-    //volLine()
+ 
+    frequencyViz();
 
     
 } 
