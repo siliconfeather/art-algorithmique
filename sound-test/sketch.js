@@ -10,14 +10,15 @@
 var showEllipse = false
 var volTranslate = false
 var frequency = false
-var frequencyCircle = true
+var frequencyCircle = false
+var frequencyCircleLine = true
 
 var showCircleViz = false
 
 //to use these, I would need to store the history on a file and get it (preload (would it lag?), make sure it's empty before starting a test) to be able to change the values without losing the history.
 
 var mic, vol, fft, spectrum, bandW
-var nbBands = 256
+var nbBands = 64
 var volHistoryMax
 var volHistory = []
 var ampHistory = []
@@ -141,6 +142,33 @@ function frequencyCircleViz(){
 
 }
 
+
+
+function frequencyCircleLineViz(){
+   
+    translate(windowWidth/2, windowHeight/2)    
+
+    stroke(0, 0, 100, 250)
+    //console.log(spectrum)
+
+
+
+    for (var i = 0; i < spectrum.length; i++){
+        var angle = map(i, 0, spectrum.length, 0, 360)
+        var amp = spectrum[i]
+        var r = map(amp, 0, 256, 120, 350)
+        var x = r * cos(angle)
+        var y = r * sin(angle)
+        stroke(i*3, 255, 255)
+        line(0,0,x,y)
+        //var y = map(amp, 255, 1, height, 0)
+        //fill(i, 255, 255 )
+        //rect(i*bandW, y, bandW-2, height - y)
+    }
+
+
+}
+
 function draw() { 
      
     background(0, 0, 0);   
@@ -173,6 +201,10 @@ function draw() {
 
     if (frequencyCircle)
         frequencyCircleViz()
+
+    if (frequencyCircleLine)
+        frequencyCircleLineViz()
+
     if (frequency)
         frequencyViz();
 
