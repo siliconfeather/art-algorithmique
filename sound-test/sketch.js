@@ -9,11 +9,15 @@
 
 var showEllipse = false
 var volTranslate = false
+var frequency = false
+var frequencyCircle = true
+
 var showCircleViz = false
 
 //to use these, I would need to store the history on a file and get it (preload (would it lag?), make sure it's empty before starting a test) to be able to change the values without losing the history.
 
-var mic, vol, fft, spectrum
+var mic, vol, fft, spectrum, bandW
+var nbBands = 256
 var volHistoryMax
 var volHistory = []
 var ampHistory = []
@@ -23,11 +27,17 @@ function setup() {
     colorMode(HSB, 360, 100, 100, 250);
     createCanvas(windowWidth, windowHeight); 
     angleMode(DEGREES)
-    mic = new p5.AudioIn()
-    mic.start()
 
-    fft = new p5.FFT()
-    //
+    mic = new p5.AudioIn()
+    
+    
+    mic.start()
+ 
+    fft = new p5.FFT(0.8, nbBands)  //Defaut FFT 1024, (first smoothing), second second size 
+    fft.setInput(mic)
+
+    bandW = windowWidth / nbBands
+    
 
     //amp = new p5.Amplitude()
     //amp.setInput(mic)
@@ -93,8 +103,42 @@ function circleViz(){
     pop()
 }
 
-function frequencyViz(){
-    
+function frequencyViz(){   
+
+    stroke(0, 0, 100, 250)
+    //console.log(spectrum)
+
+    for (var i = 0; i < spectrum.length; i++){
+        var amp = spectrum[i]
+        var y = map(amp, 255, 1, height, 0)
+        //fill(i, 255, 255 )
+        rect(i*bandW, y, bandW-2, height - y)
+    }
+}
+
+
+function frequencyCircleViz(){
+   
+    translate(windowWidth/2, windowHeight/2)    
+
+    stroke(0, 0, 100, 250)
+    //console.log(spectrum)
+
+    beginShape();
+
+    for (var i = 0; i < spectrum.length; i++){
+        var angle = map(i, 0, spectrum.length, 0, 360)
+        var amp = spectrum[i]
+        var r = map(amp, 0, 256, 20, 100)
+        var x = r * cos(angle)
+        var y = r * sin(angle)
+        vertex(x,y)
+        //var y = map(amp, 255, 1, height, 0)
+        //fill(i, 255, 255 )
+        //rect(i*bandW, y, bandW-2, height - y)
+    }
+    endShape();
+
 }
 
 function draw() { 
@@ -122,10 +166,17 @@ function draw() {
     fill(0, 0, 100, 250)    
     text("vol * 10", windowWidth-200, windowHeight-120) 
     text(vol*10, windowWidth-200, windowHeight-100); 
-
-    //need to finish this: https://www.youtube.com/watch?v=2O3nm0Nvbi4&list=PLRqwX-V7Uu6aFcVjlDAkkGIixw70s7jpW&index=11
-    text("FFT spectrum", windowWidth-200, windowHeight-70) 
+    text("FFT spectrum length", windowWidth-200, windowHeight-70) 
     text(spectrum.length, windowWidth-200, windowHeight-50); 
+
+
+
+    if (frequencyCircle)
+        frequencyCircleViz()
+    if (frequency)
+        frequencyViz();
+
+
 
     if (showEllipse) {
         mouthEllipse()
@@ -134,7 +185,7 @@ function draw() {
     if (showCircleViz)
         circleViz()
  
-    frequencyViz();
+    //volLine();
 
     
 } 
