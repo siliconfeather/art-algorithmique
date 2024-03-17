@@ -8,6 +8,7 @@
 
 */
 
+
 var importedObject, data, selection
 var minArtworks = 5
 var maxArtworks = 12
@@ -17,6 +18,7 @@ var maxColor = 100
 var minColor = 10
 
 var figureTime = 300
+var startFrame, nbSteps
 
 var art = "\u203B"
 
@@ -31,6 +33,7 @@ function setup() {
     colorMode(HSB, 360, 100, 100, 250);
     
     createCanvas(windowWidth, windowHeight); 
+
      
     
     data = Object.values(importedObject)
@@ -59,6 +62,18 @@ function setup() {
 } 
 
 
+
+function mousePressed(){
+
+    console.log("mouse Pressed")
+    if (isLooping())
+        noLoop();
+    else
+        loop()
+
+
+}
+
 //sudo mapping to canvas
 function getPosition(lat, long){
     var x, y, largelat, largelong
@@ -83,9 +98,68 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 
-function draw() { 
-    background(0, 0, 0);   
+function drawSelection(selection, start, stepDuration){
+
+    //always show the selection with more alpha
+    selection.forEach(d => {
+
+        var location = getPosition(d.location.lat, d.location.lng)
+
+        noStroke()
+        fill(341, colorScale(d.produced_at), 67, 150)
+        text(art, location[0], location[1])
+    })
+
+    var status = frameCount-start
+    var drawTime = figureTime - stepDuration*2 
+    var percentage = status *100 / figureTime
+    var drawPercentage = (status-stepDuration) *100 / drawTime
+    //console.log("percentage", percentage)
+    //console.log("draw percentage", drawPercentage)
+
+    //start drawing after initial step of drawing with more alpha
+    if ( percentage > 20 && percentage < 80 ){
         
+        var toDraw = drawPercentage / nbSteps
+        
+        //console.log("to Draw", toDraw)
+
+        
+        /*
+        if(current != 0){
+            stroke(0, 0, 100, 165)
+
+            var previouslocation = getPosition(selection[current-1].location.lat, selection[current-1].location.lng)
+            
+            line(previouslocation[0], previouslocation[1], location[0], location[1]) 
+            
+        }
+        */
+    }
+
+    //when the entire drawing is completed, last step is to stay as is
+    if (status > drawTime){
+        
+        selection.forEach(d =>{
+            var current = selection.indexOf(d)
+
+            if(current != 0){
+                stroke(0, 0, 100, 165)
+                var location = getPosition(d.location.lat, d.location.lng)
+                var previouslocation = getPosition(selection[current-1].location.lat, selection[current-1].location.lng)
+                
+                line(previouslocation[0], previouslocation[1], location[0], location[1]) 
+                
+            }
+        })
+
+    }
+
+}
+
+function draw() { 
+      
+    background(0, 0, 0)    
     fill(0, 0, 100, 250)
 
     //TIME 
@@ -104,48 +178,29 @@ function draw() {
         push()
             textSize(28);     
             text(art, location[0], location[1])
-        pop()
-        var current = data.indexOf(d)        
+        pop()        
           
         
     });
-
-
 
     if (frameCount >= figureTime){
         
 
         if (frameCount % figureTime == 0){
+            startFrame = frameCount;
             var nbArtworks = Math.round( random(minArtworks, maxArtworks))
             var randomStart = Math.round( random(0, 276-nbArtworks))
             console.log("randomStart", randomStart)
 
             selection = data.slice(randomStart, randomStart+nbArtworks)
             console.log("new selection", selection)
+            
+            nbSteps = (selection.length-1)
+            console.log("nb Steps", nbSteps)
+            
         }
 
-        selection.forEach(d => {
-
-            var location = getPosition(d.location.lat, d.location.lng)
-    
-            noStroke()
-            fill(341, colorScale(d.produced_at), 67, 150)
-            text(art, location[0], location[1])
-            
-            var current = selection.indexOf(d)
-
-            //console.log("current index", current)
-
-            if(current != 0){
-                stroke(0, 0, 100, 165)
-    
-                var previouslocation = getPosition(selection[current-1].location.lat, selection[current-1].location.lng)
-                
-                line(previouslocation[0], previouslocation[1], location[0], location[1]) 
-                
-            }
-        })
-        
+        drawSelection(selection, startFrame, figureTime/(selection.length+2))
     
 
     }
