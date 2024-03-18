@@ -18,10 +18,15 @@ var maxColor = 100
 var minColor = 10
 
 var figureTime
-var stepTime = 80
+var figureDistance
+
 var initFigureTime = 30
 var finishedFigureTime = 150
 var drawTime, startFrame, nbSteps
+var speed = 2
+var maxDistance = 800
+//var maxStepTime = 5 //seconds
+//var maxStepFrames
 
 
 var art = "\u203B"
@@ -37,10 +42,15 @@ function setup() {
     colorMode(HSB, 360, 100, 100, 250);
     
     createCanvas(windowWidth, windowHeight); 
-    figureTime = 300 //init figure time
+    figureTime = 120 //init figure time
     startFrame = 0 //init start frame
-     
+    console.log(windowWidth)
+
+ //   maxDistance = Math.max(windowWidth, windowHeight)
+ //   maxStepFrames = maxStepTime*60
+ //   speed = maxDistance / maxStepFrames
     
+
     data = Object.values(importedObject)
 
     //order by produced_at = from newest to oldest
@@ -107,80 +117,52 @@ function drawSelection(selection, start){
 
     //always show the selection with more alpha
     selection.forEach(d => {
-
-        var location = getPosition(d.location.lat, d.location.lng)
-
         noStroke()
         fill(341, colorScale(d.produced_at), 67, 150)
-        text(art, location[0], location[1])
+        text(art, d.artLocation[0], d.artLocation[1])
     })
 
     var status = frameCount-start
     drawTime = figureTime-initFigureTime-finishedFigureTime
-    //var percentage = status *100 / figureTime
-    //console.log("percentage", percentage)
+
     
-    
+    stroke(0, 0, 100, 165)
+
     if (status > (initFigureTime + drawTime)) { 
         //if the entire drawing is completed, last step is to stay as is 
         console.log("drawing completed")
         selection.forEach(d =>{
-            var current = selection.indexOf(d)
-
-            if(current != 0){
-                stroke(0, 0, 100, 165)
-                var location = getPosition(d.location.lat, d.location.lng)
-                var previouslocation = getPosition(selection[current-1].location.lat, selection[current-1].location.lng)
-                
-                line(previouslocation[0], previouslocation[1], location[0], location[1]) 
-                
-            }
+            if (d.nextArtLocation)
+                line(d.artLocation[0], d.artLocation[1], d.nextArtLocation[0], d.nextArtLocation[1])                 
         })
 
     }
-    else if ( status > initFigureTime){ //
-        
+    else if ( status > initFigureTime){ 
         //start drawing after initial step of drawing with more alpha (Delay by initFigureTime)
-        //console.log("lets draw", drawTime)
-
-        var currentStep = Math.trunc((status - initFigureTime) / stepTime)
-
+        
+        var currentStep = 0
+        var nextStepTime = 0
         for (i = 0; i < nbSteps; i++){
+            nextStepTime += selection[i].time
+            if ((status-initFigureTime) > nextStepTime){
+                currentStep += 1
+            }
+            
+
             if (i < currentStep){
                 //draw the whole line
-                var startLocation = getPosition(selection[i].location.lat, selection[i].location.lng)
-                var endLocation = getPosition(selection[i+1].location.lat, selection[i+1].location.lng)
-                stroke(0, 0, 100, 165)
-                line(startLocation[0], startLocation[1], endLocation[0], endLocation[1])
+                line(selection[i].artLocation[0], selection[i].artLocation[1], selection[i].nextArtLocation[0], selection[i].nextArtLocation[1])
             }
             else if (i == currentStep) {
                 //compute which part we need to draw
-                var percentageOfCurrentStep = ((status - initFigureTime) / stepTime) - currentStep
-                console.log(percentageOfCurrentStep+" of step "+currentStep)
+                var percentageOfCurrentStep = (status - initFigureTime ) / nextStepTime
 
-                var startLocation = getPosition(selection[i].location.lat, selection[i].location.lng)
-                var endLocation = getPosition(selection[i+1].location.lat, selection[i+1].location.lng)
-
-                var endX = map(percentageOfCurrentStep, 0, 1, startLocation[0], endLocation[0])
-                var endY = map(percentageOfCurrentStep, 0, 1, startLocation[1], endLocation[1])
-                line(startLocation[0], startLocation[1], endX, endY)
+                var endX = map(percentageOfCurrentStep, 0, 1, selection[i].artLocation[0], selection[i].nextArtLocation[0])
+                var endY = map(percentageOfCurrentStep, 0, 1, selection[i].artLocation[1], selection[i].nextArtLocation[1])
+                line(selection[i].artLocation[0], selection[i].artLocation[1], endX, endY)
 
             }
         }
-
-
-        
-
-        /*
-        if(current != 0){
-            stroke(0, 0, 100, 165)
-
-            var previouslocation = getPosition(selection[current-1].location.lat, selection[current-1].location.lng)
-            
-            line(previouslocation[0], previouslocation[1], location[0], location[1]) 
-            
-        }
-        */
     }
 
 }
@@ -188,16 +170,8 @@ function drawSelection(selection, start){
 function draw() { 
       
     background(0, 0, 0)    
-    fill(0, 0, 100, 250)
-
-    //TIME 
-    //put timer in data loop
-    //time variable, compteur de temps ex: 1 an = 360 frames
-    //temps courant: frames since start of the piece (modulo)
-    //si on veut que ça se dessine au fur et à mesure → diviser la distance à faire par le nombre de frames ...
 
     data.forEach(d => {
-
         var location = getPosition(d.location.lat, d.location.lng)
 
         noStroke()
@@ -222,11 +196,51 @@ function draw() {
         console.log("new selection", selection)
 
         nbSteps = (selection.length-1)
-
         console.log("nb Steps", nbSteps)
+        
+        var distance = 0;
+        var time = 0
+        selection.forEach(d =>{
+            var location = getPosition(d.location.lat, d.location.lng)
+            d.artLocation = location
+            var currentDistance
+            var currentTime
+            var current = selection.indexOf(d)
+            if (current < selection.length-1){
+                
+                var nextLocation = getPosition(selection[current+1].location.lat, selection[current+1].location.lng)
+                d.nextArtLocation = nextLocation
+                currentDistance = dist(location[0], location[1], nextLocation[0], nextLocation[1])
+                
+                if (currentDistance > maxDistance){
+                    console.log("step "+ current + " :" + currentDistance + "replaced by max distance")
+                    distance += maxDistance
+                    currentTime = Math.trunc(maxDistance / speed)
+                    
+                }
+                else {
+                    console.log("step "+ current + " :" + currentDistance)
+                    distance += currentDistance
+                    currentTime = Math.trunc(currentDistance / speed)
+                    
+                }
+                d.time = currentTime
+                time += currentTime
+                d.distance = currentDistance
+            }
+            else{
+                d.distance = 0
+                d.time = 0
+            }
+            
+        })
 
-        figureTime = (nbSteps * stepTime)+initFigureTime+finishedFigureTime
+        figureDistance = distance
 
+        console.log("Figure distance", figureDistance)
+    
+        figureTime = Math.trunc(time) + initFigureTime + finishedFigureTime
+        console.log("Figure time", figureTime)
     }
 
     if (selection)
