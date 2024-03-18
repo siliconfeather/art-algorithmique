@@ -17,8 +17,12 @@ var minLat, minLong, maxLat, maxLong, minYear, maxYear
 var maxColor = 100
 var minColor = 10
 
-var figureTime = 300
-var startFrame, nbSteps
+var figureTime
+var stepTime = 80
+var initFigureTime = 30
+var finishedFigureTime = 150
+var drawTime, startFrame, nbSteps
+
 
 var art = "\u203B"
 
@@ -33,7 +37,8 @@ function setup() {
     colorMode(HSB, 360, 100, 100, 250);
     
     createCanvas(windowWidth, windowHeight); 
-
+    figureTime = 300 //init figure time
+    startFrame = 0 //init start frame
      
     
     data = Object.values(importedObject)
@@ -98,7 +103,7 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 
-function drawSelection(selection, start, stepDuration){
+function drawSelection(selection, start){
 
     //always show the selection with more alpha
     selection.forEach(d => {
@@ -111,35 +116,14 @@ function drawSelection(selection, start, stepDuration){
     })
 
     var status = frameCount-start
-    var drawTime = figureTime - stepDuration*2 
-    var percentage = status *100 / figureTime
-    var drawPercentage = (status-stepDuration) *100 / drawTime
+    drawTime = figureTime-initFigureTime-finishedFigureTime
+    //var percentage = status *100 / figureTime
     //console.log("percentage", percentage)
-    //console.log("draw percentage", drawPercentage)
-
-    //start drawing after initial step of drawing with more alpha
-    if ( percentage > 20 && percentage < 80 ){
-        
-        var toDraw = drawPercentage / nbSteps
-        
-        //console.log("to Draw", toDraw)
-
-        
-        /*
-        if(current != 0){
-            stroke(0, 0, 100, 165)
-
-            var previouslocation = getPosition(selection[current-1].location.lat, selection[current-1].location.lng)
-            
-            line(previouslocation[0], previouslocation[1], location[0], location[1]) 
-            
-        }
-        */
-    }
-
-    //when the entire drawing is completed, last step is to stay as is
-    if (status > drawTime){
-        
+    
+    
+    if (status > (initFigureTime + drawTime)) { 
+        //if the entire drawing is completed, last step is to stay as is 
+        console.log("drawing completed")
         selection.forEach(d =>{
             var current = selection.indexOf(d)
 
@@ -153,6 +137,38 @@ function drawSelection(selection, start, stepDuration){
             }
         })
 
+    }
+    else if ( status > initFigureTime){ //
+        
+        //start drawing after initial step of drawing with more alpha (Delay by initFigureTime)
+        //console.log("lets draw", drawTime)
+
+        var currentStep = Math.trunc((status - initFigureTime) /stepTime)
+        console.log(currentStep)
+
+        for (i = 0; i < nbSteps; i++){
+            if (i <= currentStep){
+                
+                var startLocation = getPosition(selection[i].location.lat, selection[i].location.lng)
+                var endLocation = getPosition(selection[i+1].location.lat, selection[i+1].location.lng)
+                stroke(0, 0, 100, 165)
+                line(startLocation[0], startLocation[1], endLocation[0], endLocation[1])
+            }
+        }
+
+
+        
+
+        /*
+        if(current != 0){
+            stroke(0, 0, 100, 165)
+
+            var previouslocation = getPosition(selection[current-1].location.lat, selection[current-1].location.lng)
+            
+            line(previouslocation[0], previouslocation[1], location[0], location[1]) 
+            
+        }
+        */
     }
 
 }
@@ -183,27 +199,28 @@ function draw() {
         
     });
 
-    if (frameCount >= figureTime){
-        
+    //new selection
+    if (frameCount-figureTime == startFrame){
+        startFrame = frameCount;
+        var nbArtworks = Math.round( random(minArtworks, maxArtworks))
+        var randomStart = Math.round( random(0, 276-nbArtworks))
+        console.log("randomStart", randomStart)
 
-        if (frameCount % figureTime == 0){
-            startFrame = frameCount;
-            var nbArtworks = Math.round( random(minArtworks, maxArtworks))
-            var randomStart = Math.round( random(0, 276-nbArtworks))
-            console.log("randomStart", randomStart)
+        selection = data.slice(randomStart, randomStart+nbArtworks)
+        console.log("new selection", selection)
 
-            selection = data.slice(randomStart, randomStart+nbArtworks)
-            console.log("new selection", selection)
-            
-            nbSteps = (selection.length-1)
-            console.log("nb Steps", nbSteps)
-            
-        }
+        nbSteps = (selection.length-1)
 
-        drawSelection(selection, startFrame, figureTime/(selection.length+2))
-    
+        console.log("nb Steps", nbSteps)
+
+        figureTime = (nbSteps * stepTime)+initFigureTime+finishedFigureTime
 
     }
+
+    if (selection)
+        drawSelection(selection, startFrame)    
+
+    
 
 
 } 
