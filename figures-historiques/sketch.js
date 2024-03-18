@@ -143,16 +143,28 @@ function drawSelection(selection, start){
         //start drawing after initial step of drawing with more alpha (Delay by initFigureTime)
         //console.log("lets draw", drawTime)
 
-        var currentStep = Math.trunc((status - initFigureTime) /stepTime)
-        console.log(currentStep)
+        var currentStep = Math.trunc((status - initFigureTime) / stepTime)
 
         for (i = 0; i < nbSteps; i++){
-            if (i <= currentStep){
-                
+            if (i < currentStep){
+                //draw the whole line
                 var startLocation = getPosition(selection[i].location.lat, selection[i].location.lng)
                 var endLocation = getPosition(selection[i+1].location.lat, selection[i+1].location.lng)
                 stroke(0, 0, 100, 165)
                 line(startLocation[0], startLocation[1], endLocation[0], endLocation[1])
+            }
+            else if (i == currentStep) {
+                //compute which part we need to draw
+                var percentageOfCurrentStep = ((status - initFigureTime) / stepTime) - currentStep
+                console.log(percentageOfCurrentStep+" of step "+currentStep)
+
+                var startLocation = getPosition(selection[i].location.lat, selection[i].location.lng)
+                var endLocation = getPosition(selection[i+1].location.lat, selection[i+1].location.lng)
+
+                var endX = map(percentageOfCurrentStep, 0, 1, startLocation[0], endLocation[0])
+                var endY = map(percentageOfCurrentStep, 0, 1, startLocation[1], endLocation[1])
+                line(startLocation[0], startLocation[1], endX, endY)
+
             }
         }
 
