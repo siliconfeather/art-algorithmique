@@ -31,7 +31,7 @@ LenaMK Hiver 2024
 Quelques tentatives à jouer avec des algorithms
 
 
-##  <a name='MONA'></a>Data: [Public artworks by women](./web-of-women/)
+##  <a name='MONA'></a>Data: [Public artworks by women](./figures-historiques/)
 Plusieurs tests: 
 - [Titres (au hasard) d'œuvres réalisées par des femmes](./artistes-femmes-MONA/)
 - [Web of women](./web-of-women/)
