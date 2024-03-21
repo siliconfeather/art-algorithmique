@@ -21,6 +21,12 @@ LenaMK Hiver 2024
 
 ![Capture d'écran du processus de création](./img/vermeer.gif)
 
+
+<video width="960" height="1080" controls>
+  <source src="/img/algo.mp4" type="video/mp4">
+  Your browser does not support the video tag. Le tag vidéo n'est pas supporté pas le navigateur.
+</video>
+
 ##  <a name='algo'></a>Algorithm: [Recursive Vermeer tiles](./tiling/)
 Quelques tentatives à jouer avec des algorithms
 
