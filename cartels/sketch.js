@@ -17,8 +17,7 @@ let cartelHeight = 7 //to fit 4 cartels in the width of the paper
 var cartelMargins = 0.5
 let cartelWidthPx, cartelHeightPx, paperHeightPx, paperWidthPx, cartelMarginsPx
 var currentCartel
-
-var font = 'Courier'
+var myFont;
 var titleFontSize = 30
 var artistFontSize = 24
 var textFontSize = 16
@@ -29,16 +28,17 @@ var hardwareHeight = 200
 var softwareHeight = 300
 var descriptionHeight = 350
 
-function preload(){
+function preload() {
+    myFont = loadFont('fonts/1CAMBam_Stick_9.ttf')
     data = loadJSON("data.json")
 }
 
 
-function setup() { 
+function setup() {
     colorMode(HSB, 360, 100, 100, 250);
 
     //paper size
-    createCanvas(paperWidth * printerDPI, paperHeight * printerDPI); 
+    createCanvas(paperWidth * printerDPI, paperHeight * printerDPI);
 
     cartelWidthPx = cartelWidth * printerDPI
     cartelHeightPx = cartelHeight * printerDPI
@@ -47,15 +47,15 @@ function setup() {
     paperHeightPx = paperHeight * printerDPI
 
     currentCartel = 0
-    
+
     //load font
-    textFont(font) 
+    textFont(myFont)
 
     noLoop();
 
-} 
+}
 
-function drawCartel(x, y, width, height){
+function drawCartel(x, y, width, height) {
     noStroke()
     fill(341, 72, 67, 10)
     rect(x, y, width, height)
@@ -65,11 +65,11 @@ function drawCartel(x, y, width, height){
     translate(x, y)
 
     //if we still have a cartel to draw
-    if (data[currentCartel]){
+    if (data[currentCartel]) {
         console.log(data[currentCartel])
-        //all text is black
+            //all text is black
         stroke(0, 0, 0, 250)
-        
+
         //using width limits the textbox width to the available size of the cartel. However, we need to check for textbox height, to make sure it doesn't overflow like hardware currently does for Lena's cartel
         textSize(titleFontSize)
         text(`${data[currentCartel].title}`, 0, titleHeight, width)
@@ -87,44 +87,42 @@ function drawCartel(x, y, width, height){
     pop()
 
     currentCartel++;
-    
+
 }
 
 
-function draw() { 
-    
+function draw() {
 
-    for (var i = 0; i <= paperWidth; i += cartelWidth){
+
+    for (var i = 0; i <= paperWidth; i += cartelWidth) {
 
         var x = i * printerDPI
         stroke(0, 0, 0, 50)
         line(x, 0, x, paperHeightPx)
 
-        for (var j = cartelHeight; j <= paperHeight; j += cartelHeight){
+        for (var j = cartelHeight; j <= paperHeight; j += cartelHeight) {
 
             var y = j * printerDPI
             stroke(0, 0, 0, 50)
             line(x, y, x + cartelWidthPx, y)
 
-            
 
-            drawCartel(x + cartelMarginsPx , y - cartelHeightPx + cartelMarginsPx, cartelWidthPx - cartelMarginsPx * 2, cartelHeightPx - cartelMarginsPx * 2)
-            
+
+            drawCartel(x + cartelMarginsPx, y - cartelHeightPx + cartelMarginsPx, cartelWidthPx - cartelMarginsPx * 2, cartelHeightPx - cartelMarginsPx * 2)
+
 
         }
 
 
     }
-    
-    
-    
 
 
 
 
-    textSize(30); 
-    
-
-} 
 
 
+
+    textSize(30);
+
+
+}
