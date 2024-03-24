@@ -1,0 +1,59 @@
+[
+    {
+        "title": "test",
+        "artist": "Benoît",
+        "hardware":"some hardware description",
+        "software":"some software details",
+        "description":"anything you want to add \ncan be multiline"
+    },
+    {
+        "title": "Gertraud & the machines",
+        "artist": "Lena MK & William Diakité",
+        "hardware":"Boîte à musique avec peigne de lamelles métalliques Kalliope (début 1900), interfaces audio, ordinateurs, hauts-parleurs, projecteur",
+        "software":"p5.js, Max/Msp",
+        "description":"bla"
+    },
+    {
+        "title": "Varia",
+        "artist": "Tiffany",
+        "hardware":"Lights",
+        "software":"everybody's code",
+        "description":"anything you want to add \ncan be multiline"
+    },
+    {
+        "title": "Clouds by Clouds",
+        "artist": "Maude",
+        "hardware":"some hardware description",
+        "software":"some software details",
+        "description":"anything you want to add \ncan be multiline"
+    },
+    {
+        "title": "test",
+        "artist": "Brice",
+        "hardware":"some hardware description",
+        "software":"some software details",
+        "description":"anything you want to add \ncan be multiline"
+    },
+    {
+        "title": "test",
+        "artist": "Ivan",
+        "hardware":"some hardware description",
+        "software":"some software details",
+        "description":"anything you want to add \ncan be multiline"
+    },
+    {
+        "title": "test",
+        "artist": "Rafaela",
+        "hardware":"some hardware description",
+        "software":"some software details",
+        "description":"anything you want to add \ncan be multiline"
+    },
+    {
+        "title": "test",
+        "artist": "Yvan",
+        "hardware":"some hardware description",
+        "software":"some software details",
+        "description":"anything you want to add \ncan be multiline"
+    }
+     
+]
