@@ -8,7 +8,12 @@
 
 var showSpectrumPunchCards = false
 var showSpectrumLines = false
-var showSpectrumQuilt = true
+var showPaperCrumbles = false
+var showMovingPaperCrumbles = true
+
+
+var xoff = 0
+var yoff
 
 
 var mic, vol, spectrum, fft, bandW, sound
@@ -19,6 +24,8 @@ var volHistory = []
 var spectrumHistory = []
 var shapes = []
 var playing
+
+var pageMargin = 100
 
 function setup() { 
     colorMode(HSB, 360, 100, 100, 250);
@@ -34,6 +41,12 @@ function setup() {
 
     bandW = windowWidth / nbBands
     background(0, 0, 0);   
+
+    off = 0.0
+    xoff = 0.0
+    incx = 0.2
+    incy = 0.2
+    incz = 0.001
 } 
 
 
@@ -184,7 +197,6 @@ function frequencyDisc(){
 function spectrumLines(){
     var selection = 4
     var margin = 10
-    var pageMargin = 100
 
     for (var s = 1; s < nbBands / selection; s++){
         var dist = 3        
@@ -208,7 +220,6 @@ function spectrumPunchCard(){
 
     var selection = 4
     var margin = 10
-    var pageMargin = 100
 
     for (var s = 1; s < nbBands / selection; s++){
         
@@ -230,7 +241,7 @@ function spectrumPunchCard(){
 }
 
 
-function spectrumQuilt(){
+function spectrumPaperCrumbles(){
     var selection = 4
     var margin = 10
     var pageMargin = 100
@@ -271,13 +282,20 @@ function buildShapes(){
 
         //first value in shape array is nb of sides
         newShape.push(nbSides) 
+
+        //init xy for the shape
+        var initX = random(pageMargin, windowWidth - pageMargin)
+        var initY = random(pageMargin, windowHeight - pageMargin)
+        newShape.push(initX)
+        newShape.push(initY)
         
         //create xy location for each side
         for(var i = 0; i <= nbSides; i++) {
             var x = random(5,50)
             var y = random(5,50)
             //following values are x, y for each side
-            newShape.push(x, y)
+            newShape.push(x)
+            newShape.push(y)
             
         };
 
@@ -286,43 +304,65 @@ function buildShapes(){
     }
 }
 
-function spectrumSmoothQuilt(){
-    var selection = 4
-    var margin = 10
-    var pageMargin = 100
+function spectrumMovingPaperCrumbles(){
 
-    /*
     if (shapes.length == 0)
         buildShapes();
-    */
+    
+    yoff = 0
+    
     for (var s = 1; s < shapes.length; s++){
-                    
-        var shapeX = 
         
-        shapes[s].length
+        var opacity = map(spectrum[s-1], 0, 255, 10, 100)
         
-        var opacity = map(spectrum[s-1], 0, 255, 0, 100)
-        console.log
 
-        frameRate(5);
+        //frameRate(20);
         
         fill(0, 0, opacity, 250)
-
+        //fill(0, 0, 100, 250)
         push()
-            translate(startX, startY)
+            translate(shapes[s][1], shapes[s][2])
 
             beginShape()
 
                 vertex(0, 0)
-
-                for(var i = 0; i < nbSides; i++){
-                    vertex(random(5,50),random(5,50) )
+                //for the number of sides
+                for(var i = 0; i < shapes[s][0]; i++){
+                    vertex(shapes[s][i+3], shapes[s][i+4])
                 }
 
             endShape()
         pop()
+
+        
+        shapes[s][1] += noise(xoff, yoff)
+        
+        shapes[s][2] += noise(yoff, xoff)
+        
+        if(spectrum[s-1] > 180){
+            //shapes[s][1] = map(spectrum[s-1], 150, 255, shapes[s][1], pageMargin)
+
+            var removeX = random(5,20)
+            var removeY = random(5,20)
+
+            if (shapes[s][1]-removeX < 0)
+                shapes[s][1] = windowWidth
+            else
+                shapes[s][1] -= removeX
+
+            if (shapes[s][2]-removeY < 0)
+                shapes[s][2] = windowHeight
+            else
+                shapes[s][2] -= removeX
+
+        }
+
+
+        yoff += 0.001
         
     }
+    xoff+= 0.1
+
 }
 
 function mousePressed(){
@@ -370,8 +410,11 @@ function draw() {
     if (showSpectrumLines)
         spectrumLines()
 
-    if (showSpectrumQuilt)    
-        spectrumQuilt()
+    if (showPaperCrumbles)    
+        spectrumPaperCrumbles()
+
+    if (showMovingPaperCrumbles)    
+        spectrumMovingPaperCrumbles()
     
 } 
 
