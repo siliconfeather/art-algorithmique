@@ -6,8 +6,8 @@
 
 */
 
-var showSpectrumPunchCards = false
-var showSpectrumLines = false
+var showSpectrumPunchCards = true
+var showSpectrumLines = true
 
 
 var mic, vol, spectrum, fft, bandW, sound
@@ -229,6 +229,7 @@ function spectrumPunchCard(){
 }
 
 function buildShapes(){
+    //as many shapes as there are bands in the frequency
     for (var b = 0; b < nbBands; b++){
         var nbSides = random(3, 9)
         var newShape = []
@@ -236,20 +237,20 @@ function buildShapes(){
         //first value in shape array is nb of sides
         newShape.push(nbSides) 
         
-        //following values are x, y for each side
-        nbSides.forEach(s => {
+        //create xy location for each side
+        for(var i = 0; i <= nbSides; i++) {
             var x = random(5,50)
             var y = random(5,50)
-
+            //following values are x, y for each side
             newShape.push(x, y)
             
-        });
+        };
 
         shapes.push(newShape)
         
     }
 }
-
+/*
 function spectrumQuilt(){
     var selection = 4
     var margin = 10
@@ -258,11 +259,11 @@ function spectrumQuilt(){
     if (shapes.length == 0)
         buildShapes();
     
-    for (var s = 1; s < nbBands / selection; s++){
+    for (var s = 1; s < shapes.length; s++){
                     
-        var startX = random(pageMargin, windowWidth - pageMargin)
-        var startY = random(pageMargin, windowHeight - pageMargin)
-        var 
+        var shapeX = 
+        
+        shapes[s].length
         
         var opacity = map(spectrum[s-1], 0, 255, 0, 100)
         console.log
@@ -286,7 +287,7 @@ function spectrumQuilt(){
         pop()
         
     }
-}
+}*/
 
 function mousePressed(){
     if (isLooping()){
@@ -333,7 +334,7 @@ function draw() {
     if (showSpectrumLines)
         spectrumLines()
 
-    spectrumQuilt()
+    //spectrumQuilt()
     
 } 
 
