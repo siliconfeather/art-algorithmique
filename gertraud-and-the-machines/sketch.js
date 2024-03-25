@@ -6,8 +6,9 @@
 
 */
 
-var showSpectrumPunchCards = true
-var showSpectrumLines = true
+var showSpectrumPunchCards = false
+var showSpectrumLines = false
+var showSpectrumQuilt = true
 
 
 var mic, vol, spectrum, fft, bandW, sound
@@ -228,6 +229,40 @@ function spectrumPunchCard(){
     
 }
 
+
+function spectrumQuilt(){
+    var selection = 4
+    var margin = 10
+    var pageMargin = 100
+    frameRate(5);
+    for (var s = 1; s < nbBands; s++){
+                    
+        var startX = random(pageMargin, windowWidth-pageMargin)
+        var startY = random(pageMargin, windowHeight-pageMargin)
+        var nbSides = random(3,9)
+        
+        var opacity = map(spectrum[s-1], 0, 255, 0, 100)
+        
+        fill(0, 0, opacity, 250)
+
+        push()
+            translate(startX, startY)
+
+            beginShape()
+
+                vertex(0, 0)
+
+                for(var i = 0; i < nbSides; i++){
+                    vertex(random(5,50),random(5,50) )
+                }
+
+            endShape()
+        pop()
+        
+    }
+}
+
+
 function buildShapes(){
     //as many shapes as there are bands in the frequency
     for (var b = 0; b < nbBands; b++){
@@ -250,15 +285,16 @@ function buildShapes(){
         
     }
 }
-/*
-function spectrumQuilt(){
+
+function spectrumSmoothQuilt(){
     var selection = 4
     var margin = 10
     var pageMargin = 100
 
+    /*
     if (shapes.length == 0)
         buildShapes();
-    
+    */
     for (var s = 1; s < shapes.length; s++){
                     
         var shapeX = 
@@ -277,17 +313,17 @@ function spectrumQuilt(){
 
             beginShape()
 
-            vertex(0, 0)
+                vertex(0, 0)
 
-            for(var i = 0; i < nbSides; i++){
-                vertex(random(5,50),random(5,50) )
-            }
+                for(var i = 0; i < nbSides; i++){
+                    vertex(random(5,50),random(5,50) )
+                }
 
             endShape()
         pop()
         
     }
-}*/
+}
 
 function mousePressed(){
     if (isLooping()){
@@ -334,7 +370,8 @@ function draw() {
     if (showSpectrumLines)
         spectrumLines()
 
-    //spectrumQuilt()
+    if (showSpectrumQuilt)    
+        spectrumQuilt()
     
 } 
 
