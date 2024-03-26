@@ -49,6 +49,13 @@
         "description":"anything you want to add \ncan be multiline"
     },
     {
+        "title": "Bio-Entangle",
+        "artist": "Felix Navarro",
+        "hardware":"MacBook Pro, Projecteur",
+        "software":"p5.js, 3DMol.js",
+        "description":"anything you want to add \ncan be multiline"
+    },
+    {
         "title": "test",
         "artist": "Yvan",
         "hardware":"some hardware description",
